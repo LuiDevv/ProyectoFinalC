@@ -2,16 +2,16 @@
 #include <stdlib.h>
 #include <time.h>
 
-const char* determinarGanador(int eleccion1, int eleccion2) {
+int determinarGanador(int eleccion1, int eleccion2) {
     if (eleccion1 == eleccion2) {
-        return "Empate";
+        return 0;
     }
     if ((eleccion1 == 1 && eleccion2 == 3) ||
         (eleccion1 == 2 && eleccion2 == 1) ||
         (eleccion1 == 3 && eleccion2 == 2)) {
-        return "Jugador 1 gana";
+        return 1;
     }
-    return "Jugador 2 gana";
+    return 2;
 }
 
 const char* opcionToString(int opcion) {
@@ -42,85 +42,111 @@ void mostrarMenu() {
     printf("\nElige una opcion: ");
 }
 
-int main() {
+int main()
+{
     int opcion, jugador1, jugador2;
+    int puntuacionJugador1 = 0, puntuacionJugador2 = 0;
     char jugarDeNuevo;
     srand(time(NULL));
 
-    do {
+    do
+    {
         mostrarMenu();
         scanf("%d", &opcion);
 
-        switch (opcion) {
-            case 1:
-                do {
-                    printf("Elige tu jugada (1. Piedra, 2. Papel, 3. Tijeras): ");
-                    scanf("%d", &jugador1);
-                    if (jugador1 < 1 || jugador1 > 3) {
-                        printf("Eleccion invalida. Intentalo de nuevo.\n");
-                        continue;
-                    }
+        switch (opcion)
+        {
+        case 1:
+            do
+            {
+                printf("Elige tu jugada (1. Piedra, 2. Papel, 3. Tijeras): ");
+                scanf("%d", &jugador1);
+                if (jugador1 < 1 || jugador1 > 3)
+                {
+                    printf("Eleccion invalida. Intentalo de nuevo.\n");
+                    continue;
+                }
 
-                    if (jugador1 == 1) mostrarASCII("piedra.txt");
-                    else if (jugador1 == 2) mostrarASCII("papel.txt");
-                    else if (jugador1 == 3) mostrarASCII("tijeras.txt");
+                jugador2 = rand() % 3 + 1;
+                printf("\nCPU eligio:\n%s\n", opcionToString(jugador2));
 
-                    jugador2 = rand() % 3 + 1;
-                    printf("\nCPU eligio:\n");
-                    if (jugador2 == 1) mostrarASCII("piedra.txt");
-                    else if (jugador2 == 2) mostrarASCII("papel.txt");
-                    else if (jugador2 == 3) mostrarASCII("tijeras.txt");
+                int resultado = determinarGanador(jugador1, jugador2);
+                if (resultado == 1)
+                {
+                    puntuacionJugador1++;
+                    printf("Jugador 1 gana esta ronda.\n");
+                }
+                else if (resultado == 2)
+                {
+                    puntuacionJugador2++;
+                    printf("CPU gana esta ronda.\n");
+                }
+                else
+                {
+                    printf("Es un empate.\n");
+                }
 
-                    printf("\n%s\n", determinarGanador(jugador1, jugador2));
+                printf("\n--- Marcador ---\n");
+                printf("Jugador 1: %d\n", puntuacionJugador1);
+                printf("CPU: %d\n", puntuacionJugador2);
 
-                    printf("Quieres jugar de nuevo? (s/n): ");
-                    scanf(" %c", &jugarDeNuevo);
-                } while (jugarDeNuevo == 's' || jugarDeNuevo == 'S');
-                break;
+                printf("Quieres jugar de nuevo? (s/n): ");
+                scanf(" %c", &jugarDeNuevo);
+            } while (jugarDeNuevo == 's' || jugarDeNuevo == 'S');
+            break;
 
-            case 2:
-                do {
-                    printf("Jugador 1, elige tu jugada (1. Piedra, 2. Papel, 3. Tijeras): ");
-                    scanf("%d", &jugador1);
-                    if (jugador1 < 1 || jugador1 > 3) {
-                        printf("Eleccion invalida. Intentalo de nuevo.\n");
-                        continue;
-                    }
-                    printf("Jugador 2, elige tu jugada (1. Piedra, 2. Papel, 3. Tijeras): ");
-                    scanf("%d", &jugador2);
-                    if (jugador2 < 1 || jugador2 > 3) {
-                        printf("Eleccion invalida. Intentalo de nuevo.\n");
-                        continue;
-                    }
+        case 2:
+            do
+            {
+                printf("Jugador 1, elige tu jugada (1. Piedra, 2. Papel, 3. Tijeras): ");
+                scanf("%d", &jugador1);
+                printf("Jugador 2, elige tu jugada (1. Piedra, 2. Papel, 3. Tijeras): ");
+                scanf("%d", &jugador2);
 
-                    printf("\nJugador 1 eligio:\n");
-                    if (jugador1 == 1) mostrarASCII("piedra.txt");
-                    else if (jugador1 == 2) mostrarASCII("papel.txt");
-                    else if (jugador1 == 3) mostrarASCII("tijeras.txt");
+                int resultado = determinarGanador(jugador1, jugador2);
+                if (resultado == 1)
+                {
+                    puntuacionJugador1++;
+                    printf("Jugador 1 gana esta ronda.\n");
+                }
+                else if (resultado == 2)
+                {
+                    puntuacionJugador2++;
+                    printf("Jugador 2 gana esta ronda.\n");
+                }
+                else
+                {
+                    printf("Es un empate.\n");
+                }
 
-                    printf("\nJugador 2 eligio:\n");
-                    if (jugador2 == 1) mostrarASCII("piedra.txt");
-                    else if (jugador2 == 2) mostrarASCII("papel.txt");
-                    else if (jugador2 == 3) mostrarASCII("tijeras.txt");
+                printf("\n--- Marcador ---\n");
+                printf("Jugador 1: %d\n", puntuacionJugador1);
+                printf("Jugador 2: %d\n", puntuacionJugador2);
 
-                    printf("\n%s\n", determinarGanador(jugador1, jugador2));
+                printf("¿Quieres jugar de nuevo? (s/n): ");
+                scanf(" %c", &jugarDeNuevo);
+            } while (jugarDeNuevo == 's' || jugarDeNuevo == 'S');
+            break;
 
-                    printf("¿Quieres jugar de nuevo? (s/n): ");
-                    scanf(" %c", &jugarDeNuevo);
-                } while (jugarDeNuevo == 's' || jugarDeNuevo == 'S');
-                break;
+        case 3:
+            puntuacionJugador1 = 0;
+            puntuacionJugador2 = 0;
+            printf("\n--- Marcador reiniciado ---\n");
+            printf("Jugador 1: %d\n", puntuacionJugador1);
+            printf("Jugador 2: %d\n", puntuacionJugador2);
+            break;
 
-            case 3:
-                printf("Gracias por jugar.\n");
-                break;
+        case 4:
+            printf("Gracias por jugar.\n");
+            break;
 
-            default:
-                printf("Opcion invalida. Intentalo de nuevo.\n");
-                break;
+        default:
+            printf("Opcion invalida. Intentalo de nuevo.\n");
+            break;
         }
 
         printf("\n");
-    } while (opcion != 3);
+    } while (opcion != 4);
 
     return 0;
 }
